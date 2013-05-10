@@ -14,6 +14,7 @@ class Sentinel(object):
         self.target = target
         f = list_python_files(path)
         t = get_unittest_files(f)
+        mutants = dict()
         if tests_are_green(t):
             for gene in find_genes(target, path):
                 wolverine = weapon_x.WeaponX()
@@ -23,7 +24,13 @@ class Sentinel(object):
                     g = gene.split('|')[0]
                     m = gene.split('|')[1]
                     d = gene.split('|')[2]
-                    print 'you found the mutant %s\n\t-%s with mutation %s' % (g,d,m)
+                    if g not in mutants:
+                        mutants[g] = dict()
+                    mutants[g][m] = d
+            for m in mutants:
+                print 'you found the mutant %s with the powers:' % (m)
+                for p in mutants[m]:
+                    print '\t-%s with mutation %s' % (mutants[m][p], p)
         else:
             print 'tests must be green'
 

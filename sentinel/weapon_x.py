@@ -8,7 +8,7 @@ from re import match
 
 class WeaponX(object):
     claws = False
-    regex = r'hello.*'
+    regex = r'^hello\.[a-z]*$'
     gene = False
 
     @classmethod
@@ -27,7 +27,7 @@ class WeaponX(object):
 
 
     def find_module(self, fullname, path=None):
-        if self.claws and fullname == 'hello.hello':
+        if self.claws and match(self.regex, fullname):
             return self
         return None
  
