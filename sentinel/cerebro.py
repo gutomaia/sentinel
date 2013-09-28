@@ -9,8 +9,6 @@ class Cerebro(ast.NodeVisitor):
         self.genes = []
         self.path = ''
 
-    def visit_ClassDef(self, node):
-        pass
 
     def visit_FunctionDef(self, node):
         self.level += 1
@@ -42,5 +40,3 @@ def tag(node, path, level):
     md5 = hashlib.md5()
     md5.update(s)
     return md5.hexdigest()
-
-

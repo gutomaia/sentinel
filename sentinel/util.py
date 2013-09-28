@@ -16,7 +16,6 @@ def list_python_files(path):
     return pfiles
 
 def get_unittest_files(files):
-    #return [f for f in files if f.endswith('_test.py') ]
     return ['example.hello.hello_test']
 
 def get_unittests(path):
@@ -34,10 +33,6 @@ def run_tests(tests):
 def tests_are_green(tests):
     result = run_tests(tests)
     assert result.testsRun > 0
-    #if not result.wasSuccessful():
-    #    print result.errors
-    #    print result.failures
-    #print result.wasSuccessful()
     return result.wasSuccessful()
 
 def find_genes(target, path):

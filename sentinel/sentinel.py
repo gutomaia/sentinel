@@ -31,6 +31,8 @@ class Sentinel(object):
                 print 'you found the mutant %s with the powers:' % (m)
                 for p in mutants[m]:
                     print '\t-%s with mutation %s' % (mutants[m][p], p)
+            else:
+                print 'you dont have mutants'
         else:
             print 'tests must be green'
 
