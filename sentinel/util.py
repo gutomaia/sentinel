@@ -15,23 +15,23 @@ def list_python_files(path):
                  pfiles.append(os.path.join(r,files))
     return pfiles
 
-def get_unittest_files(files):
-    return ['example.hello.hello_test']
-
-def get_unittests(path):
+def get_suite(path):
     sys.path.append(path)
     tests = unittest.TestLoader()
     return tests.discover(path, pattern='*_test.py')
 
-def run_tests(tests):
+def run_tests(target_module, path=None):
     loader = unittest.TestLoader()
+    #TODO suite = loader.loadTestsFromModule('hello')
     suite = loader.discover('example/', pattern='*_test.py')
+
+    #TODO reload test package
     st = StringIO()
-    result = unittest.TextTestRunner(stream=st ,verbosity=3).run(suite)
+    result = unittest.TextTestRunner(stream=st ,verbosity=3, failfast=True).run(suite)
     return result
 
-def tests_are_green(tests):
-    result = run_tests(tests)
+def tests_are_green(target_module, path=None):
+    result = run_tests(target_module)
     assert result.testsRun > 0
     return result.wasSuccessful()
 

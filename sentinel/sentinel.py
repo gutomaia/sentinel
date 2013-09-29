@@ -5,22 +5,27 @@ import logging
 import argparse
 from ConfigParser import ConfigParser
 
-from util import list_python_files, get_unittest_files, tests_are_green, find_genes
-import weapon_x
+from util import list_python_files, tests_are_green, find_genes, run_tests
+from weapon_x import WeaponX
 
 class Sentinel(object):
 
     def __init__(self, target, path):
+        #sys.dont_write_bytecode = False
+        WeaponX.deploy()
         self.target = target
         f = list_python_files(path)
-        t = get_unittest_files(f)
+        #t = get_unittest_files(f)
         mutants = dict()
-        if tests_are_green(t):
+        # print 'STEP 1'
+        if tests_are_green(None):
             for gene in find_genes(target, path):
-                wolverine = weapon_x.WeaponX()
-                wolverine.target = target
-                wolverine.set_claws(True, gene)
-                if tests_are_green(t):
+                # print 'STEP 2'
+                #wolverine.target = target
+                WeaponX.set_claws(True, gene)
+                # from hello.hello import world
+                # print world()
+                if tests_are_green(None):
                     g = gene.split('|')[0]
                     m = gene.split('|')[1]
                     d = gene.split('|')[2]

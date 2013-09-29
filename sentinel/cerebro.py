@@ -12,7 +12,7 @@ class Cerebro(ast.NodeVisitor):
 
     def visit_FunctionDef(self, node):
         self.level += 1
-        self.path += 'def <%s>' % node.name
+        self.path = 'def <%s>' % node.name
         self.generic_visit(node)
         #todo remove with substring
         self.level -= 1

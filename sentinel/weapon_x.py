@@ -8,39 +8,48 @@ from re import match
 
 class WeaponX(object):
     claws = False
-    regex = r'^(hello\.[a-z]*)$'
-    gene = False
+    regex = r'^hello\.[a-z]*$'
+    gene = None
+
+    @classmethod
+    def deploy(cls):
+        sys.meta_path = [cls]
+        #sys.path_hooks.append(cls)
 
     @classmethod
     def set_claws(cls, state, gene):
-        if state:
-            sys.meta_path = [cls]
+        #print 'claws %s' % state
         cls.claws = state
         cls.gene = gene
-        ms = []
+        #ms = []
         for m in sys.modules:
             if match(cls.regex, m):
-                ms.append(m)
-        for m in ms:
-            del sys.modules[m]
+                if sys.modules[m]:
+                    reload(sys.modules[m])
+                    #print 'reload %s' % m
+                #ms.append(m)
+        if 'hello.hello_test' in sys.modules:
+            reload(sys.modules['hello.hello_test'])
 
-    def find_module(self, fullname, path=None):
+    @classmethod
+    def find_module(cls, fullname, path=None):
         #TODO use path
-        if self.claws and match(self.regex, fullname):
-            return self
+        #print 'find_module %s' % fullname
+        if cls.claws and match(cls.regex, fullname):
+            #print 'FOUND %s' % fullname
+            return cls
         return None
- 
-    def load_module(self, name):
-        if name in sys.modules:
-            return sys.modules[name]
+
+    @classmethod
+    def load_module(cls, name):
+        #print 'load_module %s' % name
         if name == 'hello.hello':
             with open('example/hello/hello.py') as f:
                 tree = ast.parse(f.read())
-            Mutator(self.gene).visit(tree)
+            Mutator(cls.gene).visit(tree)
             tree = ast.fix_missing_locations(tree)
-            mymodule = imp.new_module('hello.hello')
+            mymodule = imp.new_module(name)
             code = compile(tree, '<string>', 'exec')
             exec code in mymodule.__dict__
             sys.modules[name] = mymodule
             return mymodule
-
